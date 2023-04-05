@@ -1,0 +1,364 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="JSanchezEstructuraModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Departamento">
+          <Key>
+            <PropertyRef Name="DepartamentoID" />
+          </Key>
+          <Property Name="DepartamentoID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Empleado">
+          <Key>
+            <PropertyRef Name="EmpleadoID" />
+          </Key>
+          <Property Name="EmpleadoID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" />
+          <Property Name="PuestoID" Type="int" />
+          <Property Name="DepartamentoID" Type="int" />
+        </EntityType>
+        <EntityType Name="Puesto">
+          <Key>
+            <PropertyRef Name="PuestoID" />
+          </Key>
+          <Property Name="PuestoID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'JSanchezEstructura.dbo.VistaEmpleado' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VistaEmpleado">
+          <Key>
+            <PropertyRef Name="EmpleadoID" />
+            <PropertyRef Name="PuestoID" />
+            <PropertyRef Name="DepartamentoID" />
+          </Key>
+          <Property Name="EmpleadoID" Type="int" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" />
+          <Property Name="PuestoID" Type="int" Nullable="false" />
+          <Property Name="Puesto" Type="varchar" MaxLength="20" />
+          <Property Name="DepartamentoID" Type="int" Nullable="false" />
+          <Property Name="Departamento" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="fk_EmpleadoDepartamento">
+          <End Role="Departamento" Type="Self.Departamento" Multiplicity="0..1" />
+          <End Role="Empleado" Type="Self.Empleado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Departamento">
+              <PropertyRef Name="DepartamentoID" />
+            </Principal>
+            <Dependent Role="Empleado">
+              <PropertyRef Name="DepartamentoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_EmpleadoPuesto">
+          <End Role="Puesto" Type="Self.Puesto" Multiplicity="0..1" />
+          <End Role="Empleado" Type="Self.Empleado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Puesto">
+              <PropertyRef Name="PuestoID" />
+            </Principal>
+            <Dependent Role="Empleado">
+              <PropertyRef Name="PuestoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="BuscarNombreEmpleado" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="Departamentos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="EmpleadoAdd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="PuestoID" Type="int" Mode="In" />
+          <Parameter Name="DepartamentoID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="EmpleadoDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EmpleadoID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="EmpleadoGetById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EmpleadoID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="EmpleadoUpdate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EmpleadoID" Type="int" Mode="In" />
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="PuestoID" Type="int" Mode="In" />
+          <Parameter Name="DepartamentoID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="PuestoDepartamento" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="PuestoID" Type="int" Mode="In" />
+          <Parameter Name="DepartamentoID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Puestos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="JSanchezEstructuraModelStoreContainer">
+          <EntitySet Name="Departamento" EntityType="Self.Departamento" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Empleado" EntityType="Self.Empleado" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Puesto" EntityType="Self.Puesto" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VistaEmpleado" EntityType="Self.VistaEmpleado" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VistaEmpleado].[EmpleadoID] AS [EmpleadoID], 
+    [VistaEmpleado].[Nombre] AS [Nombre], 
+    [VistaEmpleado].[PuestoID] AS [PuestoID], 
+    [VistaEmpleado].[Puesto] AS [Puesto], 
+    [VistaEmpleado].[DepartamentoID] AS [DepartamentoID], 
+    [VistaEmpleado].[Departamento] AS [Departamento]
+    FROM [dbo].[VistaEmpleado] AS [VistaEmpleado]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="fk_EmpleadoDepartamento" Association="Self.fk_EmpleadoDepartamento">
+            <End Role="Departamento" EntitySet="Departamento" />
+            <End Role="Empleado" EntitySet="Empleado" />
+          </AssociationSet>
+          <AssociationSet Name="fk_EmpleadoPuesto" Association="Self.fk_EmpleadoPuesto">
+            <End Role="Puesto" EntitySet="Puesto" />
+            <End Role="Empleado" EntitySet="Empleado" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="JSanchezEstructuraModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Departamento">
+          <Key>
+            <PropertyRef Name="DepartamentoID" />
+          </Key>
+          <Property Name="DepartamentoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Empleadoes" Relationship="Self.fk_EmpleadoDepartamento" FromRole="Departamento" ToRole="Empleado" />
+        </EntityType>
+        <EntityType Name="Empleado">
+          <Key>
+            <PropertyRef Name="EmpleadoID" />
+          </Key>
+          <Property Name="EmpleadoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PuestoID" Type="Int32" />
+          <Property Name="DepartamentoID" Type="Int32" />
+          <NavigationProperty Name="Departamento" Relationship="Self.fk_EmpleadoDepartamento" FromRole="Empleado" ToRole="Departamento" />
+          <NavigationProperty Name="Puesto" Relationship="Self.fk_EmpleadoPuesto" FromRole="Empleado" ToRole="Puesto" />
+        </EntityType>
+        <EntityType Name="Puesto">
+          <Key>
+            <PropertyRef Name="PuestoID" />
+          </Key>
+          <Property Name="PuestoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descripcion" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Empleadoes" Relationship="Self.fk_EmpleadoPuesto" FromRole="Puesto" ToRole="Empleado" />
+        </EntityType>
+        <EntityType Name="VistaEmpleado">
+          <Key>
+            <PropertyRef Name="EmpleadoID" />
+            <PropertyRef Name="PuestoID" />
+            <PropertyRef Name="DepartamentoID" />
+          </Key>
+          <Property Name="EmpleadoID" Type="Int32" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PuestoID" Type="Int32" Nullable="false" />
+          <Property Name="Puesto" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="DepartamentoID" Type="Int32" Nullable="false" />
+          <Property Name="Departamento" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="fk_EmpleadoDepartamento">
+          <End Role="Departamento" Type="Self.Departamento" Multiplicity="0..1" />
+          <End Role="Empleado" Type="Self.Empleado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Departamento">
+              <PropertyRef Name="DepartamentoID" />
+            </Principal>
+            <Dependent Role="Empleado">
+              <PropertyRef Name="DepartamentoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_EmpleadoPuesto">
+          <End Role="Puesto" Type="Self.Puesto" Multiplicity="0..1" />
+          <End Role="Empleado" Type="Self.Empleado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Puesto">
+              <PropertyRef Name="PuestoID" />
+            </Principal>
+            <Dependent Role="Empleado">
+              <PropertyRef Name="PuestoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="JSanchezEstructuraEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Departamentoes" EntityType="Self.Departamento" />
+          <EntitySet Name="Empleadoes" EntityType="Self.Empleado" />
+          <EntitySet Name="Puestoes" EntityType="Self.Puesto" />
+          <EntitySet Name="VistaEmpleadoes" EntityType="Self.VistaEmpleado" />
+          <AssociationSet Name="fk_EmpleadoDepartamento" Association="Self.fk_EmpleadoDepartamento">
+            <End Role="Departamento" EntitySet="Departamentoes" />
+            <End Role="Empleado" EntitySet="Empleadoes" />
+          </AssociationSet>
+          <AssociationSet Name="fk_EmpleadoPuesto" Association="Self.fk_EmpleadoPuesto">
+            <End Role="Puesto" EntitySet="Puestoes" />
+            <End Role="Empleado" EntitySet="Empleadoes" />
+          </AssociationSet>
+          <FunctionImport Name="BuscarNombreEmpleado" ReturnType="Collection(String)">
+          <Parameter Name="Nombre" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="EmpleadoAdd">
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="PuestoID" Mode="In" Type="Int32" />
+            <Parameter Name="DepartamentoID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="EmpleadoDelete">
+          <Parameter Name="EmpleadoID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="EmpleadoUpdate">
+            <Parameter Name="EmpleadoID" Mode="In" Type="Int32" />
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="PuestoID" Mode="In" Type="Int32" />
+            <Parameter Name="DepartamentoID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="EmpleadoGetById" ReturnType="Collection(JSanchezEstructuraModel.EmpleadoGetById_Result)">
+          <Parameter Name="EmpleadoID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Departamentos" ReturnType="Collection(JSanchezEstructuraModel.Departamentos_Result)" />
+          <FunctionImport Name="Puestos" ReturnType="Collection(JSanchezEstructuraModel.Puestos_Result)" />
+          <FunctionImport Name="PuestoDepartamento" ReturnType="Collection(JSanchezEstructuraModel.PuestoDepartamento_Result)">
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="PuestoID" Mode="In" Type="Int32" />
+            <Parameter Name="DepartamentoID" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="EmpleadoGetById_Result">
+          <Property Type="Int32" Name="EmpleadoID" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="PuestoID" Nullable="false" />
+          <Property Type="String" Name="Puesto" Nullable="true" MaxLength="20" />
+          <Property Type="Int32" Name="DepartamentoID" Nullable="false" />
+          <Property Type="String" Name="Departamento" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="Departamentos_Result">
+          <Property Type="Int32" Name="DepartamentoID" Nullable="false" />
+          <Property Type="String" Name="Departamento" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="Puestos_Result">
+          <Property Type="Int32" Name="PuestoID" Nullable="false" />
+          <Property Type="String" Name="Puestos" Nullable="true" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="PuestoDepartamento_Result">
+          <Property Type="Int32" Name="EmpleadoID" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="PuestoID" Nullable="false" />
+          <Property Type="String" Name="Puesto" Nullable="true" MaxLength="20" />
+          <Property Type="Int32" Name="DepartamentoID" Nullable="false" />
+          <Property Type="String" Name="Departamento" Nullable="true" MaxLength="50" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="JSanchezEstructuraModelStoreContainer" CdmEntityContainer="JSanchezEstructuraEntities">
+          <EntitySetMapping Name="Departamentoes">
+            <EntityTypeMapping TypeName="JSanchezEstructuraModel.Departamento">
+              <MappingFragment StoreEntitySet="Departamento">
+                <ScalarProperty Name="DepartamentoID" ColumnName="DepartamentoID" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Empleadoes">
+            <EntityTypeMapping TypeName="JSanchezEstructuraModel.Empleado">
+              <MappingFragment StoreEntitySet="Empleado">
+                <ScalarProperty Name="EmpleadoID" ColumnName="EmpleadoID" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="PuestoID" ColumnName="PuestoID" />
+                <ScalarProperty Name="DepartamentoID" ColumnName="DepartamentoID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Puestoes">
+            <EntityTypeMapping TypeName="JSanchezEstructuraModel.Puesto">
+              <MappingFragment StoreEntitySet="Puesto">
+                <ScalarProperty Name="PuestoID" ColumnName="PuestoID" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VistaEmpleadoes">
+            <EntityTypeMapping TypeName="JSanchezEstructuraModel.VistaEmpleado">
+              <MappingFragment StoreEntitySet="VistaEmpleado">
+                <ScalarProperty Name="EmpleadoID" ColumnName="EmpleadoID" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="PuestoID" ColumnName="PuestoID" />
+                <ScalarProperty Name="Puesto" ColumnName="Puesto" />
+                <ScalarProperty Name="DepartamentoID" ColumnName="DepartamentoID" />
+                <ScalarProperty Name="Departamento" ColumnName="Departamento" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="BuscarNombreEmpleado" FunctionName="JSanchezEstructuraModel.Store.BuscarNombreEmpleado" />
+          <FunctionImportMapping FunctionImportName="EmpleadoAdd" FunctionName="JSanchezEstructuraModel.Store.EmpleadoAdd" />
+          <FunctionImportMapping FunctionImportName="EmpleadoDelete" FunctionName="JSanchezEstructuraModel.Store.EmpleadoDelete" />
+          <FunctionImportMapping FunctionImportName="EmpleadoUpdate" FunctionName="JSanchezEstructuraModel.Store.EmpleadoUpdate" />
+          <FunctionImportMapping FunctionImportName="EmpleadoGetById" FunctionName="JSanchezEstructuraModel.Store.EmpleadoGetById">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JSanchezEstructuraModel.EmpleadoGetById_Result">
+                <ScalarProperty Name="EmpleadoID" ColumnName="EmpleadoID" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="PuestoID" ColumnName="PuestoID" />
+                <ScalarProperty Name="Puesto" ColumnName="Puesto" />
+                <ScalarProperty Name="DepartamentoID" ColumnName="DepartamentoID" />
+                <ScalarProperty Name="Departamento" ColumnName="Departamento" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Departamentos" FunctionName="JSanchezEstructuraModel.Store.Departamentos">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JSanchezEstructuraModel.Departamentos_Result">
+                <ScalarProperty Name="DepartamentoID" ColumnName="DepartamentoID" />
+                <ScalarProperty Name="Departamento" ColumnName="Departamento" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Puestos" FunctionName="JSanchezEstructuraModel.Store.Puestos">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JSanchezEstructuraModel.Puestos_Result">
+                <ScalarProperty Name="PuestoID" ColumnName="PuestoID" />
+                <ScalarProperty Name="Puestos" ColumnName="Puestos" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PuestoDepartamento" FunctionName="JSanchezEstructuraModel.Store.PuestoDepartamento">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JSanchezEstructuraModel.PuestoDepartamento_Result">
+                <ScalarProperty Name="EmpleadoID" ColumnName="EmpleadoID" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="PuestoID" ColumnName="PuestoID" />
+                <ScalarProperty Name="Puesto" ColumnName="Puesto" />
+                <ScalarProperty Name="DepartamentoID" ColumnName="DepartamentoID" />
+                <ScalarProperty Name="Departamento" ColumnName="Departamento" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
